@@ -1,0 +1,5 @@
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\TermPaper\obj\Debug\net5.0\TermPaper.csproj.AssemblyReference.cache
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\TermPaper\obj\Debug\net5.0\TermPaper.GeneratedMSBuildEditorConfig.editorconfig
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\TermPaper\obj\Debug\net5.0\TermPaper.AssemblyInfoInputs.cache
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\TermPaper\obj\Debug\net5.0\TermPaper.AssemblyInfo.cs
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\TermPaper\obj\Debug\net5.0\TermPaper.csproj.CoreCompileInputs.cache

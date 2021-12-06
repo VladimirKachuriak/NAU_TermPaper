@@ -1,0 +1,12 @@
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\DAL\bin\Debug\net6.0\DAL.deps.json
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\DAL\bin\Debug\net6.0\DAL.dll
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\DAL\bin\Debug\net6.0\ref\DAL.dll
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\DAL\bin\Debug\net6.0\DAL.pdb
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\DAL\obj\Debug\net6.0\DAL.csproj.AssemblyReference.cache
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\DAL\obj\Debug\net6.0\DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\DAL\obj\Debug\net6.0\DAL.AssemblyInfoInputs.cache
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\DAL\obj\Debug\net6.0\DAL.AssemblyInfo.cs
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\DAL\obj\Debug\net6.0\DAL.csproj.CoreCompileInputs.cache
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\DAL\obj\Debug\net6.0\DAL.dll
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\DAL\obj\Debug\net6.0\ref\DAL.dll
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\DAL\obj\Debug\net6.0\DAL.pdb

@@ -1,0 +1,17 @@
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\bin\Debug\net6.0\PL.deps.json
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\bin\Debug\net6.0\PL.dll
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\bin\Debug\net6.0\ref\PL.dll
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\bin\Debug\net6.0\PL.pdb
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\obj\Debug\net6.0\PL.csproj.AssemblyReference.cache
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\obj\Debug\net6.0\PL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\obj\Debug\net6.0\PL.AssemblyInfoInputs.cache
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\obj\Debug\net6.0\PL.AssemblyInfo.cs
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\obj\Debug\net6.0\PL.csproj.CoreCompileInputs.cache
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\obj\Debug\net6.0\PL.dll
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\obj\Debug\net6.0\ref\PL.dll
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\obj\Debug\net6.0\PL.pdb
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\bin\Debug\net6.0\BLL.dll
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\bin\Debug\net6.0\DAL.dll
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\bin\Debug\net6.0\BLL.pdb
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\bin\Debug\net6.0\DAL.pdb
+D:\Users\VladimirK\Documents\NAU\SecondCourse\TermPaper\PL\obj\Debug\net6.0\PL.csproj.CopyComplete
