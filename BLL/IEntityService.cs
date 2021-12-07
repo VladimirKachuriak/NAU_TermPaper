@@ -8,6 +8,6 @@ namespace BLL
 {
     public interface IEntityService
     {
-
+ 
     }
 }

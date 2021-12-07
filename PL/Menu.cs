@@ -8,7 +8,7 @@ namespace PL
         public Menu()
         {
             Console.WriteLine("WriteLine");
-            EntityService service = new EntityService(new DataContext<List<User>>("myfile"));
+            EntityService service = new EntityService(new DataContext<List<User>>("myfile"),new XMLProvider<List<User>>(), new DataContext<List<Book>>("books.xml"), new XMLProvider<List<Book>>());
             //service.setAllEntity("Mark","Kirilov","Ba21",1234);
           /*  service.addBook("AAAAA", "java", "blablab", 1);
             service.addBook("CCCCC", "java", "blablab", 2);
@@ -30,6 +30,8 @@ namespace PL
                 Console.WriteLine("10 - add book to the user");
                 Console.WriteLine("11 - delete book from user");
                 Console.WriteLine("12 - show books of the user");
+                Console.WriteLine("13 - search users by the key word");
+                Console.WriteLine("14 - search books by the key word");
 
 
                 key = Convert.ToInt32(Console.ReadLine());
@@ -159,6 +161,18 @@ namespace PL
                         {
                             Console.WriteLine("Enter ID of the user which you wanna find");
                             Console.WriteLine(service.showBooksOfUser(Convert.ToInt32(Console.ReadLine())));
+                        }
+                        break;
+                    case 13:
+                        {
+                            Console.WriteLine("Enter keyword of the user which you wanna find");
+                            Console.WriteLine(service.SearchUser(Console.ReadLine()));
+                        }
+                        break;
+                    case 14:
+                        {
+                            Console.WriteLine("Enter keyword of the book which you wanna find");
+                            Console.WriteLine(service.SearchBook(Console.ReadLine()));
                         }
                         break;
 

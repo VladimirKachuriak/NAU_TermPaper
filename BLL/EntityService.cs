@@ -11,7 +11,7 @@ namespace BLL
     public class EntityService
     {
         IDataContext<List<User>> context;
-        IDataContext<List<Book>> contextbook = new DataContext<List<Book>>("books.xml");
+        IDataContext<List<Book>> contextbook;
         delegate int BookOperation(Book a, Book b);
         delegate int UserOperation(User a, User b);
         public enum bookEnum{
@@ -25,10 +25,11 @@ namespace BLL
             Group,
 
         }
-        public EntityService(IDataContext<List<User>> context) { 
+        public EntityService(IDataContext<List<User>> context,IDataProvider<List<User>> userProvider, IDataContext<List<Book>> bookcontext, IDataProvider<List<Book>> bookProvider) { 
             this.context = context;
-            context.DataProvider =new XMLProvider<List<User>>();
-            contextbook.DataProvider = new XMLProvider<List<Book>>();
+            context.DataProvider = userProvider;
+            contextbook = bookcontext;
+            contextbook.DataProvider = bookProvider;
         }
         private BookOperation getBookOperation(bookEnum op) {
             switch (op) { 
@@ -47,14 +48,17 @@ namespace BLL
                 default: return null;
             }
         }
-        public void addBook(string author, string title, string text, int id)
+        public string addBook(string author, string title, string text, int id)
         {
+            if (!ValidatetName(author)) return "Incorrect author name format";
+            if (!ValidatetName(title)) return "Incorrect title name format";
 
             List<Book> books = contextbook.GetData();
             if (books == null)
             {
                 books = new List<Book>();
             }
+            if (books.Find((x) => x.ID == id) != null) return "book with such ID already exist";
             Book book = new Book();
             book.Author = author;
             book.Title = title;
@@ -62,6 +66,7 @@ namespace BLL
             book.Exist_status = true;
             books.Add(book);
             contextbook.SetData(books);
+            return "book added";
         }
         public string showBook(bookEnum sortmethod)
         {
@@ -223,12 +228,16 @@ namespace BLL
             return "Book doesn't exist";
 
         }
-        public void addUser(string firstname, string lastname, string group, int id) {
+        public string addUser(string firstname, string lastname, string group, int id) {
 
+            if (!ValidatetName(firstname)) return "Incorrect firstname format";
+            if (!ValidatetName(lastname)) return "Incorrect lastname format";
+            if (!ValidateGroup(group)) return "Incorrect group format";
             List<User> entities = context.GetData();
             if (entities == null) { 
             entities = new List<User>();
             }
+            if (entities.Find((x) => x.Id == id)!=null) return "user with such ID already exist";
             User entity = new User();
             entity.Id = id;
             entity.Firstname = firstname; 
@@ -236,7 +245,7 @@ namespace BLL
             entity.Academicgroup = group;
             entities.Add(entity);
             context.SetData(entities);
-            
+            return "user added successfully";
 
               
         }
@@ -279,14 +288,14 @@ namespace BLL
         {
 
             string message = "";
-            List<User> peoples = context.GetData();
-            if (peoples == null)
+            List<User> users = context.GetData();
+            if (users == null)
             {
-                peoples = new List<User>();
+                users = new List<User>();
             }
-            peoples.Sort((x, y) => x.Firstname.CompareTo(y.Firstname));
-            foreach (User entity in peoples) { 
-                message+="First name= "+entity.Firstname+"Lastname = "+entity.Lastname +"\n";
+            users.Sort((x, y) => x.Firstname.CompareTo(y.Firstname));
+            foreach (User user in users) { 
+                message+="First name= "+user.Firstname+"Lastname = "+user.Lastname +"\n";
                 return message;
             }
             return "Entity doesn't exist";
@@ -309,7 +318,68 @@ namespace BLL
 
             return "a user with this id does not exist";
         }
+        public string SearchBook(string keyword)
+        {
+            String message = "";
+            List<Book> books = contextbook.GetData();
+            if (books == null)
+            {
+                return "you haven't added any book  yet";
+            }
+            foreach (Book book in books)
+            {
+                if (book.Author.Contains(keyword))
+                {
+                    message += "Author: " + book.Author + "\tTitle: " + book.Title + "\tID:" + book.ID + "\t Exist in Library:" + book.Exist_status + "\n";
+                    continue;
+                }
+                if (book.Title.Contains(keyword))
+                {
+                    message += "Author: " + book.Author + "\tTitle: " + book.Title + "\tID:" + book.ID + "\t Exist in Library:" + book.Exist_status + "\n";
+                    continue;
+                }                
+                if (book.Data.Contains(keyword))
+                {
+                    message += "Author: " + book.Author + "\tTitle: " + book.Title + "\tID:" + book.ID + "\t Exist in Library:" + book.Exist_status + "\n";
+                    continue;
+                }
+            }
+            return message.Equals("") ? "nothing was found" : message;
+        }
+        public string SearchUser(string keyword) 
+        {
+            String message = "";
+            List<User> users = context.GetData();
+            if (users == null)
+            {
+               return "you haven't added any user  yet";
+            }
+            foreach (User user in users) {
+                if (user.Firstname.Contains(keyword)) {
+                    message += "First name= " + user.Firstname + "\tLastname = " + user.Lastname + "\tGroup = " + user.Academicgroup + "\tID = " + user.Id + "\n";
+                    continue;
+                }
+                if (user.Lastname.Contains(keyword))
+                {
+                    message += "First name= " + user.Firstname + "\tLastname = " + user.Lastname + "\tGroup = " + user.Academicgroup + "\tID = " + user.Id + "\n";
+                    continue;
+                }
+                if (user.Academicgroup.Contains(keyword))
+                {
+                    message += "First name= " + user.Firstname + "\tLastname = " + user.Lastname + "\tGroup = " + user.Academicgroup + "\tID = " + user.Id + "\n";
+                    continue;
+                }
+            }
+            return message.Equals("")?"nothing was found":message;
+        }
+        private void ValidateDate(String date)
+        {
+            Regex regex = new Regex(@"(0[1-9]|[12][0-9]|3[01])[-.](0[1-9]|1[012])[-.](19|20)\d\d$");
 
+            if (!regex.IsMatch(date))
+                throw new MyException(date);
+
+        }
         private bool ValidatetName(String date)
         {
             Regex regex = new Regex(@"^[A-Z][a-z]{2,10}$");
@@ -319,9 +389,9 @@ namespace BLL
             return false;
 
         }
-        private bool ValidatePassport(String date)
+        private bool ValidateGroup(String date)
         {
-            Regex regex = new Regex(@"^[A-Z]{2}[0-9]{4}$");
+            Regex regex = new Regex(@"^[A-Z]{2}[1-9]{3}$");
 
             if (regex.IsMatch(date))
                 return true;
