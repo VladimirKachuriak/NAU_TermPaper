@@ -14,6 +14,7 @@ namespace DAL
         public string Data { get; set; }
         public int  ID { get; set; }
         public bool Exist_status { get; set; }
+        public DateTime DeadLine{ get; set; }
 
     }
 }

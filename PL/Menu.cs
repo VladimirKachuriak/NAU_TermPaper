@@ -32,6 +32,9 @@ namespace PL
                 Console.WriteLine("12 - show books of the user");
                 Console.WriteLine("13 - search users by the key word");
                 Console.WriteLine("14 - search books by the key word");
+                Console.WriteLine("15 - show time");
+                Console.WriteLine("16 - change time");
+                Console.WriteLine("17 - update user shelf");
 
 
                 key = Convert.ToInt32(Console.ReadLine());
@@ -98,7 +101,7 @@ namespace PL
                             data = Console.ReadLine();
                             Console.WriteLine("Enter unique book Id");
                             ID = Convert.ToInt32(Console.ReadLine());
-                            service.addBook(author, title, data, ID);
+                            Console.WriteLine(service.addBook(author, title, data, ID));
 
                         }
                         break;
@@ -173,6 +176,22 @@ namespace PL
                         {
                             Console.WriteLine("Enter keyword of the book which you wanna find");
                             Console.WriteLine(service.SearchBook(Console.ReadLine()));
+                        }
+                        break;
+                    case 15:
+                        {   
+                            Console.WriteLine(service.getCurrentTime());
+                        }
+                        break;
+                    case 16:
+                        {
+                            Console.WriteLine("Enter time which you wanna set");
+                            Console.WriteLine(service.setCurrentTime(Console.ReadLine()));
+                        }
+                        break;
+                    case 17:
+                        {
+                            service.updateBookInfo();
                         }
                         break;
 

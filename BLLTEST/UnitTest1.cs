@@ -41,5 +41,16 @@ namespace BLLTEST
             Assert.Equal("book with such ID already exist", service.addBook("Tom", "Java", "blabla", 5));
             
         }
+        [Fact]
+        public void Test3()
+        {
+            EntityService service = new EntityService(new DataContext<List<User>>("myfile"), new Mock<List<User>>(), new DataContext<List<Book>>("books.xml"), new Mock<List<Book>>());
+            service.addUser("Kiril", "Boiko", "BA125", 3);
+            service.addUser("Boiko", "Kiril", "BA125", 4);
+            service.deleteUserById(3);
+
+            //Assert.Equal("",service.);
+
+        }
     }
 }

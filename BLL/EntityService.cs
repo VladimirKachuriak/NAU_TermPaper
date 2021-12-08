@@ -12,6 +12,7 @@ namespace BLL
     {
         IDataContext<List<User>> context;
         IDataContext<List<Book>> contextbook;
+        DateTime Time;
         delegate int BookOperation(Book a, Book b);
         delegate int UserOperation(User a, User b);
         public enum bookEnum{
@@ -30,6 +31,9 @@ namespace BLL
             context.DataProvider = userProvider;
             contextbook = bookcontext;
             contextbook.DataProvider = bookProvider;
+
+            Time = DateTime.Now;
+
         }
         private BookOperation getBookOperation(bookEnum op) {
             switch (op) { 
@@ -158,18 +162,23 @@ namespace BLL
             {
                 if (user.Id == userId)
                 {
-                    if (user.Shelf.Count < 5)
+                    if (user.Shelf.Count < 4)
                     {
                         foreach (Book book in books)
                         {
                             if (book.ID == bookID)
                             {
-                                book.Exist_status = false;
-
-                                user.Shelf.Add(book.ID);
-                                context.SetData(users);
-                                contextbook.SetData(books);
-                                return "book added to user successfully";
+                                if (user.Shelf.Find((x) => x == bookID) == 0)
+                                {
+                                    if (books.Find((x)=>x.ID==bookID).Exist_status==true){
+                                        book.Exist_status = false;
+                                        book.DeadLine = DateTime.Now.AddDays(3);
+                                        user.Shelf.Add(book.ID);
+                                        context.SetData(users);
+                                        contextbook.SetData(books);
+                                        return "book added to user successfully";
+                                    } return "This book already got another student";
+                                }return  "book already in your shelf";
                             }
                         }
                     }return "You can't add more than 4 books";
@@ -200,11 +209,11 @@ namespace BLL
                             {
                                 if (book.ID == index)
                                 {
-                                    message += "Author: " + book.Author + "\n Title: " + book.Title + "\n Id:" + book.ID + "\n";
+                                    message += "Author: " + book.Author + "\t Title: " + book.Title + "\t Id:" + book.ID + "\n";
                                 }
                             }
                         }
-                        return "You don't have any books yet ";
+                        return message.Equals("")?"You don't have any books yet":message;
                 }
             }
             return "The user with this ID doesn't exist";
@@ -371,6 +380,41 @@ namespace BLL
                 }
             }
             return message.Equals("")?"nothing was found":message;
+        }
+        public string getCurrentTime() {
+            return Time.ToString("dd/MM/yyyy");
+        }
+        public string setCurrentTime(String str)
+        {
+            DateTime dt;
+            DateTime.TryParse(str,out dt);
+            if (dt.ToString("dd/MM/yyyy").Equals(str)) {
+                Time = dt;
+                return "Time changed";
+            }
+            return "Incorrect time format";
+        }
+        public void updateBookInfo() {
+            List<Book> books = contextbook.GetData();
+            List<User> users = context.GetData();
+            if (users == null)
+            {
+                return;
+            }
+            if (books == null)
+            {
+                return;
+            }
+            foreach (User user in users)
+            {
+                foreach (int index in user.Shelf) {
+                    if (Time.CompareTo(books.Find((x) => x.ID == index).DeadLine)==1)
+                    {
+                        userDeleteBookById(user.Id, index);
+                    }
+                }
+            }
+
         }
         private void ValidateDate(String date)
         {
