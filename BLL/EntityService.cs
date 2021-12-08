@@ -10,7 +10,7 @@ namespace BLL
 {
     public class EntityService
     {
-        IDataContext<List<User>> context;
+        IDataContext<List<User>> contextuser;
         IDataContext<List<Book>> contextbook;
         DateTime Time;
         delegate int BookOperation(Book a, Book b);
@@ -26,8 +26,9 @@ namespace BLL
             Group,
 
         }
-        public EntityService(IDataContext<List<User>> context,IDataProvider<List<User>> userProvider, IDataContext<List<Book>> bookcontext, IDataProvider<List<Book>> bookProvider) { 
-            this.context = context;
+        public EntityService(IDataContext<List<User>> context,IDataProvider<List<User>> userProvider, 
+                             IDataContext<List<Book>> bookcontext, IDataProvider<List<Book>> bookProvider) { 
+            this.contextuser = context;
             context.DataProvider = userProvider;
             contextbook = bookcontext;
             contextbook.DataProvider = bookProvider;
@@ -75,11 +76,11 @@ namespace BLL
         public string showBook(bookEnum sortmethod)
         {
            
-            string message="";
+            string message= "";
             List<Book> books = contextbook.GetData();
             if (books == null)
             {
-                books = new List<Book>();
+                return "you haven't added any book to the library yet";
             }
             books.Sort(getBookOperation(sortmethod).Invoke);
             foreach (Book book in books) {
@@ -93,13 +94,20 @@ namespace BLL
 
         public string deleteBookById(int id) {
             List<Book> books = contextbook.GetData();
+            List<User> users = contextuser.GetData();
 
             if (books == null)
             {
                 return "you haven't added any book to the library yet";
             }
-            if (books.FindAll((x) => x.ID != id).Count > 0)
+            if (books.Find((x)=>x.ID==id)!=null)
             {
+                if (users != null)
+                {
+                    foreach (User user in users) {
+                    userDeleteBookById(user.Id, id);
+                    }
+                }
                 contextbook.SetData(books.FindAll((x) => x.ID != id));
                 return "book was successfully  deleted"; 
             }
@@ -149,7 +157,7 @@ namespace BLL
 
         public string UserAddBookByID(int userId, int bookID) {
             List<Book> books = contextbook.GetData();
-            List<User> users = context.GetData();
+            List<User> users = contextuser.GetData();
             if (users == null)
             {
                 return "you haven't added any user  yet";
@@ -170,14 +178,19 @@ namespace BLL
                             {
                                 if (user.Shelf.Find((x) => x == bookID) == 0)
                                 {
-                                    if (books.Find((x)=>x.ID==bookID).Exist_status==true){
-                                        book.Exist_status = false;
-                                        book.DeadLine = DateTime.Now.AddDays(3);
-                                        user.Shelf.Add(book.ID);
-                                        context.SetData(users);
-                                        contextbook.SetData(books);
-                                        return "book added to user successfully";
-                                    } return "This book already got another student";
+                                    if (books.Find((x) => x.ID == bookID) != null)
+                                    {
+                                        if (books.Find((x) => x.ID == bookID).Exist_status == true)
+                                        {
+                                            book.Exist_status = false;
+                                            book.DeadLine = DateTime.Now.AddDays(3);
+                                            user.Shelf.Add(book.ID);
+                                            contextuser.SetData(users);
+                                            contextbook.SetData(books);
+                                            return "book added to user successfully";
+                                        }
+                                        return "This book already got another student";
+                                    }return "there is no such book in the library ";
                                 }return  "book already in your shelf";
                             }
                         }
@@ -190,7 +203,7 @@ namespace BLL
         public string showBooksOfUser(int userId) {
             string message = "";
             List<Book> books = contextbook.GetData();
-            List<User> users = context.GetData();
+            List<User> users = contextuser.GetData();
             if (users == null)
             {
                 users = new List<User>();
@@ -224,13 +237,14 @@ namespace BLL
             List<Book> books = contextbook.GetData();
             if (books == null)
             {
-                books = new List<Book>();
+               return "you haven't added any book to the library yet";
             }
             foreach (Book book in books)
             {
                 if (book.ID == id)
                 {
                     book.Data = text;
+                    contextbook.SetData(books);
                     return "Book changed";
                 }
             }
@@ -241,8 +255,13 @@ namespace BLL
 
             if (!ValidatetName(firstname)) return "Incorrect firstname format";
             if (!ValidatetName(lastname)) return "Incorrect lastname format";
-            if (!ValidateGroup(group)) return "Incorrect group format";
-            List<User> entities = context.GetData();
+            try {
+                ValidateGroup(group);
+            }
+            catch (MyException ex) {
+                return ex.Message;
+            }
+            List<User> entities = contextuser.GetData();
             if (entities == null) { 
             entities = new List<User>();
             }
@@ -252,15 +271,16 @@ namespace BLL
             entity.Firstname = firstname; 
             entity.Lastname = lastname;
             entity.Academicgroup = group;
+            entity.Shelf = new List<int>();
             entities.Add(entity);
-            context.SetData(entities);
+            contextuser.SetData(entities);
             return "user added successfully";
 
               
         }
         public string getAllUsers(userEnum op)
         {
-            List<User> entities = context.GetData();
+            List<User> entities = contextuser.GetData();
             if (entities == null)
             {
                 return "you haven't added any user  yet";
@@ -276,13 +296,13 @@ namespace BLL
         }
         public string userDeleteBookById(int userid,int bookid) {
             List<Book> books = contextbook.GetData();
-            List<User> users = context.GetData();
+            List<User> users = contextuser.GetData();
             if (users.Find((x) => x.Id == userid) != null) {
                 if (users.Find((x) => x.Id == userid).Shelf.Find((x) => x == bookid)==bookid) {
 
                             users.Find((x) => x.Id == userid).Shelf.Remove(users.Find((x) => x.Id == userid).Shelf.Find((x) => x == bookid));
                             books.Find  ((x) => x.ID == bookid).Exist_status = true;
-                            context.SetData(users);
+                            contextuser.SetData(users);
                             contextbook.SetData(books);
                             return "book deleted";
                 }
@@ -293,27 +313,11 @@ namespace BLL
                 return "user wasn't find";
             
         }
-        public string showUsersSortByFname(int id,bookEnum userEnum)
-        {
 
-            string message = "";
-            List<User> users = context.GetData();
-            if (users == null)
-            {
-                users = new List<User>();
-            }
-            users.Sort((x, y) => x.Firstname.CompareTo(y.Firstname));
-            foreach (User user in users) { 
-                message+="First name= "+user.Firstname+"Lastname = "+user.Lastname +"\n";
-                return message;
-            }
-            return "Entity doesn't exist";
-
-        }
 
         public string deleteUserById(int id)
         {
-            List<User> users = context.GetData();
+            List<User> users = contextuser.GetData();
 
             if (users == null)
             {
@@ -321,8 +325,8 @@ namespace BLL
             }
             if (users.FindAll((x) => x.Id == id).Count > 0)
             {
-                context.SetData(users.FindAll((x) => x.Id != id));
-                return "book was successfully  deleted";
+                contextuser.SetData(users.FindAll((x) => x.Id != id));
+                return "user was successfully  deleted";
             }
 
             return "a user with this id does not exist";
@@ -358,7 +362,7 @@ namespace BLL
         public string SearchUser(string keyword) 
         {
             String message = "";
-            List<User> users = context.GetData();
+            List<User> users = contextuser.GetData();
             if (users == null)
             {
                return "you haven't added any user  yet";
@@ -396,7 +400,7 @@ namespace BLL
         }
         public void updateBookInfo() {
             List<Book> books = contextbook.GetData();
-            List<User> users = context.GetData();
+            List<User> users = contextuser.GetData();
             if (users == null)
             {
                 return;
@@ -433,13 +437,12 @@ namespace BLL
             return false;
 
         }
-        private bool ValidateGroup(String date)
+        private void ValidateGroup(String date)
         {
             Regex regex = new Regex(@"^[A-Z]{2}[1-9]{3}$");
 
-            if (regex.IsMatch(date))
-                return true;
-            return false;
+            if (!regex.IsMatch(date))throw new MyException("Incorrect group format");
+                
 
         }
 

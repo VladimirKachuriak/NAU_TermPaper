@@ -6,8 +6,7 @@ namespace PL
     public class Menu
     {
         public Menu()
-        {
-            Console.WriteLine("WriteLine");
+        {      
             EntityService service = new EntityService(new DataContext<List<User>>("myfile"),new XMLProvider<List<User>>(), new DataContext<List<Book>>("books.xml"), new XMLProvider<List<Book>>());
             //service.setAllEntity("Mark","Kirilov","Ba21",1234);
           /*  service.addBook("AAAAA", "java", "blablab", 1);
@@ -55,7 +54,7 @@ namespace PL
                             Console.WriteLine("Enter group");
                             Group = Console.ReadLine();
 
-                            service.addUser(FirstName, LastName, Group, ID);
+                            Console.WriteLine(service.addUser(FirstName, LastName, Group, ID));
                         }
                         break;
                     case 2:
@@ -137,6 +136,12 @@ namespace PL
                         {
                             Console.WriteLine("Enter ID of the book which you wanna find");
                             Console.WriteLine(service.findBookByID(Convert.ToInt32(Console.ReadLine())));
+                        }
+                        break;
+                    case 9:
+                        {
+                            Console.WriteLine("Enter ID of the book which you wanna find");
+                            Console.WriteLine(service.showDataOfBookByID(Convert.ToInt32(Console.ReadLine())));
                         }
                         break;
 

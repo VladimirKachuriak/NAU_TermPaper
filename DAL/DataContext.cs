@@ -8,7 +8,7 @@ namespace DAL
 {
     public class DataContext<T> : IDataContext<T>
     {
-        public string ConnectionString { get; set; }
+        public string ConnectionString { get;private set; }
 
         public IDataProvider<T> DataProvider { get; set; }
 
