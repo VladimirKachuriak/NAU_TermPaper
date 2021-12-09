@@ -134,5 +134,44 @@ namespace BLLTEST
             Assert.Equal("book deleted", result);
 
         }
+        [Fact]
+        public void ISchnageuserGroup__should_return_userchanged()
+        {
+            EntityService service = new EntityService(new DataContext<List<User>>("myfile"), new Mock<List<User>>(), new DataContext<List<Book>>("books.xml"), new Mock<List<Book>>());
+            service.addUser("Tom", "Lipnenko", "BB123", 3);
+            string result = service.changeUserGroupByID(3,"BB123");
+            Assert.Equal("Group of the user changed", result);
+
+        }
+        [Fact]
+        public void ISchnageBookText__should_return_BookTextchanged()
+        {
+            EntityService service = new EntityService(new DataContext<List<User>>("myfile"), new Mock<List<User>>(), new DataContext<List<Book>>("books.xml"), new Mock<List<Book>>());
+            service.addBook("Tom", "Lipnenko", "Blabal", 3);
+            string result = service.changeBookTextById(3, "BB123");
+            Assert.Equal("Book changed", result);
+
+        }
+        [Fact]
+        public void ISUserAddBookToUserByID__should_return_BookAdded()
+        {
+            EntityService service = new EntityService(new DataContext<List<User>>("myfile"), new Mock<List<User>>(), new DataContext<List<Book>>("books.xml"), new Mock<List<Book>>());
+            service.addUser("Tom", "Lipnenko", "BB123", 3);
+            service.addBook("Tom", "Lipnenko", "Blabal", 2);
+            string result = service.UserAddBookByID(3,2);
+            Assert.Equal("book added to user successfully", result);
+
+        }
+        [Fact]
+        public void ISUserDeleteBookToUserByID__should_return_BookDeleted()
+        {
+            EntityService service = new EntityService(new DataContext<List<User>>("myfile"), new Mock<List<User>>(), new DataContext<List<Book>>("books.xml"), new Mock<List<Book>>());
+            service.addUser("Tom", "Lipnenko", "BB123", 3);
+            service.addBook("Tom", "Lipnenko", "Blabal", 2);
+            service.UserAddBookByID(3, 2);
+            string result = service.userDeleteBookById(3, 2);
+            Assert.Equal("book deleted", result);
+
+        }
     }
 }

@@ -69,6 +69,7 @@ namespace BLL
             book.Title = title;
             book.ID = id;
             book.Exist_status = true;
+            book.Data = text;
             books.Add(book);
             contextbook.SetData(books);
             return "book added";
@@ -146,12 +147,41 @@ namespace BLL
             {
                 if (book.ID == id)
                 {
-                    message += "Author: " + book.Author + "\n Titiel: " + book.Title + "\n Id:" + book.ID + "\n";
+                    message += "Author: " + book.Author + "\t Titiel: " + book.Title + "\t Exist in Library:" + book.Exist_status + "\t Id:" + book.ID + "\n";
                     message += book.Data+"\n";
                     return message;
                 }
             }
             return "Book doesn't exist";
+
+        }
+
+        public string changeUserGroupByID(int id, string text)
+        {
+            string message = "";
+            try
+            {
+                ValidateGroup(text);
+            }
+            catch (MyException ex)
+            {
+                return ex.Message;
+            }
+            List<User> users = contextuser.GetData();
+            if (users == null)
+            {
+                return "you haven't added any user  yet";
+            }
+            foreach (User user in users)
+            {
+                if (user.Id == id)
+                {
+                    user.Academicgroup = text;
+                    contextuser.SetData(users);
+                    return "Group of the user changed";
+                }
+            }
+            return "User doesn't exist";
 
         }
 
@@ -192,7 +222,7 @@ namespace BLL
                                         return "This book already got another student";
                                     }return "there is no such book in the library ";
                                 }return  "book already in your shelf";
-                            }
+                            }return "No book with such id";
                         }
                     }return "You can't add more than 4 books";
                 }

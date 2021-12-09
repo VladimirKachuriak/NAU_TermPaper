@@ -34,6 +34,8 @@ namespace PL
                 Console.WriteLine("15 - show time");
                 Console.WriteLine("16 - change time");
                 Console.WriteLine("17 - update user shelf");
+                Console.WriteLine("18 - change text of the book by ID");
+                Console.WriteLine("19 - change group of the user by ID");
 
 
                 key = Convert.ToInt32(Console.ReadLine());
@@ -199,7 +201,28 @@ namespace PL
                             service.updateBookInfo();
                         }
                         break;
-
+                    case 18:
+                        {
+                            int bookId;
+                            string  text;
+                            Console.WriteLine("Enter ID of the book");
+                            bookId = Convert.ToInt32(Console.ReadLine());
+                            Console.WriteLine("Enter text of the book");
+                            text = Console.ReadLine();
+                            Console.WriteLine(service.changeBookTextById(bookId,text));
+                        }
+                        break;
+                    case 19:
+                        {
+                            int bookId;
+                            string text;
+                            Console.WriteLine("Enter ID of the user");
+                            bookId = Convert.ToInt32(Console.ReadLine());
+                            Console.WriteLine("Enter group of the user");
+                            text = Console.ReadLine();
+                            Console.WriteLine(service.changeUserGroupByID(bookId, text));
+                        }
+                        break;
                 }
             }
 
