@@ -8,7 +8,7 @@ namespace DAL
 {
     public interface IDataContext<T>
     {
-        string ConnectionString { get; }
+        string ConnectionString { get; set; }
         IDataProvider<T> DataProvider { get; set; }
         T GetData();
         void SetData(T data);

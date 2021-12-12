@@ -7,63 +7,30 @@ namespace PL
     {
         public Menu()
         {      
-            EntityService service = new EntityService(new DataContext<List<User>>("myfile"),new XMLProvider<List<User>>(), new DataContext<List<Book>>("books.xml"), new XMLProvider<List<Book>>());
-            //service.setAllEntity("Mark","Kirilov","Ba21",1234);
-          /*  service.addBook("AAAAA", "java", "blablab", 1);
-            service.addBook("CCCCC", "java", "blablab", 2);
-            service.addBook("BBBBB", "java", "blablab", 3);*/
-
-            //Console.WriteLine(service.showBookSortByTitle());
+            //EntityService service = new EntityService(new DataContext<List<User>>(),new XMLProvider<List<User>>(), new DataContext<List<Book>>(), new XMLProvider<List<Book>>());
+            BookService bookService = new BookService(new DataContext<List<User>>(),new XMLProvider<List<User>>(), new DataContext<List<Book>>(), new XMLProvider<List<Book>>());
+            UserService userService = new UserService(new DataContext<List<User>>(),new XMLProvider<List<User>>(), new DataContext<List<Book>>(), new XMLProvider<List<Book>>());
             while (true)
             {
                 int key;
-                Console.WriteLine("1 - add user");
-                Console.WriteLine("2 - delete user by id");
-                Console.WriteLine("3 - show all users");
-                Console.WriteLine("4 - change user by id");
-                Console.WriteLine("5 - add book to library");
-                Console.WriteLine("6 - delete book by id");
-                Console.WriteLine("7 - show all books");
-                Console.WriteLine("8 - find book by id");
-                Console.WriteLine("9 - show book text by id");
-                Console.WriteLine("10 - add book to the user");
-                Console.WriteLine("11 - delete book from user");
-                Console.WriteLine("12 - show books of the user");
-                Console.WriteLine("13 - search users by the key word");
-                Console.WriteLine("14 - search books by the key word");
-                Console.WriteLine("15 - show time");
-                Console.WriteLine("16 - change time");
-                Console.WriteLine("17 - update user shelf");
-                Console.WriteLine("18 - change text of the book by ID");
-                Console.WriteLine("19 - change group of the user by ID");
+                showOptions();
 
 
-                key = Convert.ToInt32(Console.ReadLine());
+
+                key = getInteger("Enter option from list");
 
                 switch (key)
                 {
 
                     case 1:
-                        {
-                            string FirstName, LastName, Group, birth_date;
-                            int ID;
-                            Console.WriteLine("Enter FirstName");
-                            FirstName = Console.ReadLine();
-                            Console.WriteLine("Enter LastName");
-                            LastName = Console.ReadLine();
-                            Console.WriteLine("Enter your Id");
-                            ID = Convert.ToInt32(Console.ReadLine());
-                            Console.WriteLine("Enter group");
-                            Group = Console.ReadLine();
-
-                            Console.WriteLine(service.addUser(FirstName, LastName, Group, ID));
+                        {        
+                            Console.WriteLine(userService.addUser(getString("Enter FirstName"), getString("Enter LastName"), getString("Enter group"), getInteger("Enter your Id")));
                         }
                         break;
                     case 2:
                         {
 
-                            Console.WriteLine("Enter  Id user which you wanna delete");
-                            Console.WriteLine(service.deleteUserById(Convert.ToInt32(Console.ReadLine())));
+                            Console.WriteLine(userService.deleteUserById(getInteger("Enter  Id user which you wanna delete")));
                         }
                         break;
                     case 3:
@@ -71,18 +38,18 @@ namespace PL
                             Console.WriteLine("Choose sort method");
                             Console.WriteLine("1-sort by firstname");
                             Console.WriteLine("2-sort by lastname");
-                            Console.WriteLine("2-sort by group");
-                            key = Convert.ToInt32(Console.ReadLine());
+                            Console.WriteLine("3-sort by group");
+                            key = getInteger("Enter code of the option");
                             switch (key)
                             {
                                 case 1:
-                                    Console.WriteLine(service.getAllUsers(EntityService.userEnum.FirstName));
+                                    Console.WriteLine(userService.getAllUsers(UserService.userEnum.FirstName));
                                     break;
                                 case 2:
-                                    Console.WriteLine(service.getAllUsers(EntityService.userEnum.Lastname));
+                                    Console.WriteLine(userService.getAllUsers(UserService.userEnum.Lastname));
                                     break;
                                 case 3:
-                                    Console.WriteLine(service.getAllUsers(EntityService.userEnum.Group));
+                                    Console.WriteLine(userService.getAllUsers(UserService.userEnum.Group));
                                     break;
                                 default:
                                     Console.WriteLine("Incorrect command");
@@ -92,41 +59,28 @@ namespace PL
                         break;
                     case 5:
                         {
-                            string author, title, data;
-                            int ID;
-                            Console.WriteLine("Enter author name");
-                            author = Console.ReadLine();
-                            Console.WriteLine("Enter title of the book");
-                            title = Console.ReadLine();
-                            Console.WriteLine("Enter description of the book");
-                            data = Console.ReadLine();
-                            Console.WriteLine("Enter unique book Id");
-                            ID = Convert.ToInt32(Console.ReadLine());
-                            Console.WriteLine(service.addBook(author, title, data, ID));
+                            Console.WriteLine(bookService.addBook(getString("Enter author name"), getString("Enter title of the book"), getString("Enter description of the book"), getInteger("Enter unique book Id")));
 
                         }
                         break;
                     case 6:
                         {
-                            Console.WriteLine("Enter id of the book which you wanna delete");
-                            Console.WriteLine(service.deleteBookById(Convert.ToInt32(Console.ReadLine())));
+                           Console.WriteLine(bookService.deleteBookById(getInteger("Enter id of the book which you wanna delete"),userService));
                         }
                         break;
 
                     case 7:
                         {
-
                             Console.WriteLine("Choose sort method");
-                            Console.WriteLine("1-sort by name");
+                            Console.WriteLine("1-sort by title");
                             Console.WriteLine("2-sort by author");
-                            key = Convert.ToInt32(Console.ReadLine());
-                            switch (key)
+                            switch (getInteger("Enter number of the option"))
                             {
                                 case 1:
-                                    Console.WriteLine(service.showBook(EntityService.bookEnum.Name));
+                                    Console.WriteLine(bookService.showBook(BookService.bookEnum.Title));
                                     break;
                                 case 2:
-                                    Console.WriteLine(service.showBook(EntityService.bookEnum.Author));
+                                    Console.WriteLine(bookService.showBook(BookService.bookEnum.Author));
                                     break;
                                 default: Console.WriteLine("Incorrect command");
                                     break;
@@ -136,96 +90,110 @@ namespace PL
                         break;
                     case 8:
                         {
-                            Console.WriteLine("Enter ID of the book which you wanna find");
-                            Console.WriteLine(service.findBookByID(Convert.ToInt32(Console.ReadLine())));
+                            Console.WriteLine(bookService.findBookByID(getInteger("Enter ID of the book which you wanna find")));
                         }
                         break;
                     case 9:
                         {
-                            Console.WriteLine("Enter ID of the book which you wanna find");
-                            Console.WriteLine(service.showDataOfBookByID(Convert.ToInt32(Console.ReadLine())));
+                            Console.WriteLine(bookService.showDataOfBookByID(getInteger("Enter ID of the book which you wanna find")));
                         }
                         break;
 
                     case 10:
                         {
-                            int userId, bookid;
-                            Console.WriteLine("Enter ID of the user");
-                            userId = Convert.ToInt32(Console.ReadLine());
-                            Console.WriteLine("Enter ID of the book which you wanna find");
-                            bookid = Convert.ToInt32(Console.ReadLine());
-                            Console.WriteLine(service.UserAddBookByID(userId, bookid));
+                            Console.WriteLine(userService.UserAddBookByID(getInteger("Enter ID of the user"), getInteger("Enter ID of the book which you wanna find")));
                         }
                         break;
                     case 11:
                         {
-                            int userId, bookid;
-                            Console.WriteLine("Enter ID of the user");
-                            userId = Convert.ToInt32(Console.ReadLine());
-                            Console.WriteLine("Enter ID of the book which you wanna delete");
-                            bookid = Convert.ToInt32(Console.ReadLine());
-                            Console.WriteLine(service.userDeleteBookById(userId, bookid));
+                            Console.WriteLine(userService.userDeleteBookById(getInteger("Enter ID of the user"), getInteger("Enter ID of the book which you wanna find")));
                         }
                         break;
                     case 12:
                         {
-                            Console.WriteLine("Enter ID of the user which you wanna find");
-                            Console.WriteLine(service.showBooksOfUser(Convert.ToInt32(Console.ReadLine())));
+                            Console.WriteLine(userService.showBooksOfUser(getInteger("Enter ID of the user which you wanna find")));
                         }
                         break;
                     case 13:
                         {
-                            Console.WriteLine("Enter keyword of the user which you wanna find");
-                            Console.WriteLine(service.SearchUser(Console.ReadLine()));
+                            Console.WriteLine(userService.SearchUser(getString("Enter keyword of the user which you wanna find")));
                         }
                         break;
                     case 14:
                         {
                             Console.WriteLine("Enter keyword of the book which you wanna find");
-                            Console.WriteLine(service.SearchBook(Console.ReadLine()));
+                            Console.WriteLine(bookService.SearchBook(getString("Enter keyword of the book which you wanna find")));
                         }
                         break;
                     case 15:
                         {   
-                            Console.WriteLine(service.getCurrentTime());
+                            Console.WriteLine(userService.getCurrentTime());
                         }
                         break;
                     case 16:
                         {
-                            Console.WriteLine("Enter time which you wanna set");
-                            Console.WriteLine(service.setCurrentTime(Console.ReadLine()));
+                            Console.WriteLine(userService.setCurrentTime(getString("Enter time which you wanna set")));
                         }
                         break;
                     case 17:
                         {
-                            service.updateBookInfo();
+                            userService.updateBookInfo();
                         }
                         break;
                     case 18:
                         {
-                            int bookId;
-                            string  text;
-                            Console.WriteLine("Enter ID of the book");
-                            bookId = Convert.ToInt32(Console.ReadLine());
-                            Console.WriteLine("Enter text of the book");
-                            text = Console.ReadLine();
-                            Console.WriteLine(service.changeBookTextById(bookId,text));
+                            Console.WriteLine(bookService.changeBookTextById(getInteger("Enter ID of the book"), getString("Enter text of the book")));
                         }
                         break;
                     case 19:
                         {
-                            int bookId;
-                            string text;
-                            Console.WriteLine("Enter ID of the user");
-                            bookId = Convert.ToInt32(Console.ReadLine());
-                            Console.WriteLine("Enter group of the user");
-                            text = Console.ReadLine();
-                            Console.WriteLine(service.changeUserGroupByID(bookId, text));
+                            Console.WriteLine(userService.changeUserGroupByID(getInteger("Enter ID of the user"),getString("Enter group of the user")));
                         }
                         break;
                 }
             }
 
+        }
+        private int getInteger(string message) { 
+            Console.WriteLine(message);
+            while (true)
+            {
+                try
+                {
+                   return Convert.ToInt32(Console.ReadLine());
+                    
+                }
+                catch (Exception e) { 
+                    Console.WriteLine("That's not a number. Try again");
+                }
+               
+            }
+        }
+        private string getString(string message)
+        {
+            Console.WriteLine(message);
+            return Console.ReadLine();
+        }
+        private void showOptions() {
+            Console.WriteLine("1 - add user");
+            Console.WriteLine("2 - delete user by id");
+            Console.WriteLine("3 - show all users");
+            Console.WriteLine("4 - change user by id");
+            Console.WriteLine("5 - add book to library");
+            Console.WriteLine("6 - delete book by id");
+            Console.WriteLine("7 - show all books");
+            Console.WriteLine("8 - find book by id");
+            Console.WriteLine("9 - show book text by id");
+            Console.WriteLine("10 - add book to the user");
+            Console.WriteLine("11 - delete book from user");
+            Console.WriteLine("12 - show books of the user");
+            Console.WriteLine("13 - search users by the key word");
+            Console.WriteLine("14 - search books by the key word");
+            Console.WriteLine("15 - show time");
+            Console.WriteLine("16 - change time");
+            Console.WriteLine("17 - update user shelf");
+            Console.WriteLine("18 - change text of the book by ID");
+            Console.WriteLine("19 - change group of the user by ID");
         }
 
     }
